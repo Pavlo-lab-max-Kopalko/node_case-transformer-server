@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-// const convertToCase = require('./convertToCase/convertToCase');
+const convertToCase = require('./convertToCase/convertToCase');
 
 const { getReceivedCase } = require('./getReceivedCase');
 const { getErrorMessage } = require('./getErrorMessage');
@@ -9,8 +9,12 @@ function createServer() {
   const http = require('http');
   const server = http.createServer((req, res) => {
     if (req.method !== 'GET') {
+      res.setHeader('Content-Type', 'application/json');
+
       res.statusCode = 400;
     } else if (req.url === '/') {
+      res.setHeader('Content-Type', 'application/json');
+
       res.statusCode = 400;
     } else {
       const [textPart, queryString] = req.url.split('?');
@@ -18,16 +22,18 @@ function createServer() {
       const params = new URLSearchParams(queryString);
       const toCase = params.get('toCase');
       const fromCase = getReceivedCase(text);
-      const errorMessage = getErrorMessage(textPart, toCase, fromCase);
+      const errorMessage = getErrorMessage(textPart, toCase);
+
+      const { originalCase, convertedText } = convertToCase(text, toCase);
 
       console.log(toCase);
       console.log(text);
       console.log(`${textPart} -- textPart`);
       console.log(`${queryString} -- queryString`);
 
-      if (errorMessage.errors.length > 0) {
-        res.setHeader('Content-Type', 'application/json');
+      res.setHeader('Content-Type', 'application/json');
 
+      if (errorMessage.errors.length > 0) {
         res.statusCode = 400;
 
         res.write(JSON.stringify(errorMessage));
@@ -38,13 +44,12 @@ function createServer() {
 
       res.setHeader('Content-Type', 'application/json');
 
-      // const result = convertToCase('writeFile', 'UPPER');
+      const response = {
+        originalCase: fromCase,
+        convertedText: text,
+      };
 
-      // console.log(result);
-
-      const validWords = returnText(text, toCase);
-
-      res.write(validWords);
+      res.write(JSON.stringify(response));
     }
 
     res.end('');

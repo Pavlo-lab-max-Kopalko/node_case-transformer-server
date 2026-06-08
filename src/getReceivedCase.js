@@ -16,8 +16,6 @@ function getReceivedCase(text) {
 
   for (const el of arrTruth) {
     if (el[0].test(text)) {
-      // receivedCaseValue = el[1];
-
       return el[1];
     }
   }

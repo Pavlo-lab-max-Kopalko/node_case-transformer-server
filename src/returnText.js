@@ -1,4 +1,4 @@
-const makeCamelCase = require('./makeCamelCase');
+const { makeCamelCase } = require('./makeCamelCase');
 
 function returnText(text, toCase) {
   switch (toCase) {
