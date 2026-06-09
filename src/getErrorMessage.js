@@ -12,7 +12,7 @@ const getErrorMessage = (textPart, toCase) => {
   if (toCase === null) {
     errorMessage.errors.push({
       message:
-        '\"toCase\" query param is required. Correct request is: \"/<TEXT_TO_CONVERT>?toCase=<CASE_NAME>\".',
+        '"toCase" query param is required. Correct request is: "/<TEXT_TO_CONVERT>?toCase=<CASE_NAME>".',
     });
   } else if (
     toCase !== 'SNAKE' &&
