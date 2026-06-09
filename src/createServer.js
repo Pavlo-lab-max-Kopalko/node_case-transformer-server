@@ -1,6 +1,5 @@
 /* eslint-disable no-console */
 const { convertToCase } = require('./convertToCase/convertToCase');
-
 const { getErrorMessage } = require('./getErrorMessage');
 
 function createServer() {
