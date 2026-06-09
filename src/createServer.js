@@ -20,8 +20,6 @@ function createServer() {
       const toCase = params.get('toCase');
       const errorMessage = getErrorMessage(textPart, toCase);
 
-      const { originalCase, convertedText } = convertToCase(text, toCase);
-
       res.setHeader('Content-Type', 'application/json');
 
       if (errorMessage.errors.length > 0) {
@@ -29,20 +27,23 @@ function createServer() {
         res.write(JSON.stringify(errorMessage));
         res.statusMessage = 'Bad request';
 
-        res.end('');
-
         return;
       }
+
+      const { originalCase, convertedText } = convertToCase(text, toCase);
 
       res.setHeader('Content-Type', 'application/json');
 
       const response = {
         originalCase: originalCase,
+        targetCase: toCase,
+        originalText: text,
         convertedText: convertedText,
       };
 
       res.statusMessage = 'OK';
-      res.write(JSON.stringify(response));
+      res.statusCode = 200;
+      res.end(JSON.stringify(response));
     }
 
     res.end('');
